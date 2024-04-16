@@ -10,7 +10,6 @@ import jdk.internal.vm.ContinuationScope;
 
 import java.util.Iterator;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -18,11 +17,7 @@ public interface Sequence<T> extends Iterable<T> {
     
     static <T> Sequence<T> create(SequenceRunnable generator) {
         ContinuationScope scope = new ContinuationScope("SequenceScope");
-        
-        return () -> {
-            var it = new SequenceIterator<T>(generator, scope);
-            return it;
-        };
+        return () -> new SequenceIterator<T>(generator, scope);
     }
     
     class SequenceIterator<T> implements  Iterator<T> {
