@@ -93,7 +93,7 @@ public class LoomGeneratorTestsJava {
 	@Test
 	public void  hanoiTowerGeneratorTest() {
 		var hanoiSeq = Sequence.create(new SequenceBlock<String>() {
-			Sequence.SequenceIterator<String> s;
+			SequenceIterator<String> s;
 			
 			void hanoi(int n, char start, char end, char aux) {
 				if (n > 0) {
@@ -104,7 +104,7 @@ public class LoomGeneratorTestsJava {
 			}
 			
 			@Override
-			public void exec(Sequence.SequenceIterator<String> seq) {
+			public void exec(SequenceIterator<String> seq) {
 				s = seq;
 				hanoi(10, 'A', 'B', 'C');
 			}

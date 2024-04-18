@@ -78,9 +78,8 @@ public interface Sequence<T> extends Iterable<T> {
     
    
     default Sequence<T> limit(int lim) {
-        var src = this;
         return  Sequence.create(s -> {
-            Iterator<T> srcIt = src.iterator();
+            Iterator<T> srcIt = iterator();
             int curr = 0;
             
             while (curr++ < lim && srcIt.hasNext()) {
@@ -91,11 +90,9 @@ public interface Sequence<T> extends Iterable<T> {
     }
     
     default <U,V>  Sequence<V> zip(Sequence<U> other , BiFunction<T,U,V> combiner )  {
-        var src  = this;
         return  Sequence.create(s -> {
-           
             var itOther = other.iterator();
-            var itSrc = src.iterator();
+            var itSrc = iterator();
             while(itSrc.hasNext() && itOther.hasNext()) {
                 s.yield(combiner.apply(itSrc.next(), itOther.next()));
             }
@@ -103,9 +100,8 @@ public interface Sequence<T> extends Iterable<T> {
     }
     
     default <U>  Sequence<U> flatMap(Function<T,Iterable<U>> mapper )  {
-        var src  = this;
         return  Sequence.create(s -> {
-            for(var t : src) {
+            for(var t : this) {
                 for (var u : mapper.apply(t)) {
                     s.yield(u);
                 }
