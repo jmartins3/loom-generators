@@ -1,6 +1,7 @@
 package pt.isel.pc.sequences1;
 
 import org.junit.jupiter.api.Test;
+import pt.isel.pc.sequences1.Sequence;
 
 import java.util.List;
 
@@ -10,18 +11,16 @@ public class LoomGeneratorTestsJava {
 	
 	@Test
 	public void javaSequenceTest() {
-		var sn = new SequenceRunnable() {
-			public void run() {
-				int curr = 2;
-				
-				while (true) {
-					this.yield(curr);
-					curr += 2;
-				}
+		SequenceBlock<Integer> block = seq -> {
+			int curr = 2;
+			var s = seq;
+			while (true) {
+				seq.yield(curr);
+				curr += 2;
 			}
 		};
 		
-		Sequence<Integer> evens = create(sn);
+		Sequence<Integer> evens = create(block);
 		
 		var evensLimited = evens.limit(20);
 		
@@ -47,13 +46,10 @@ public class LoomGeneratorTestsJava {
 	
 	@Test
 	public void javaSequenceZipTest() {
-		Sequence<String> strings = create(new SequenceRunnable() {
-			@Override
-			public void run() {
-				this.yield("Joao");
-				this.yield("Jorge");
-				this.yield("Pedro");
-			}
+		Sequence<String> strings = create(s-> {
+				s.yield("Joao");
+				s.yield("Jorge");
+				s.yield("Pedro");
 		});
 		
 		var pairs =
@@ -62,19 +58,14 @@ public class LoomGeneratorTestsJava {
 							 
 		
 		pairs.forEach((t)-> System.out.println(t) );
-		
 		pairs.forEach((t)-> System.out.println(t) );
-		
 	}
 	
 	private Sequence<Pair<Integer,Integer>> combs(int min, int max) {
-		return Sequence.create(new SequenceRunnable() {
-			@Override
-			public void run() {
-				for(int i = min; i <= max; ++i) {
-					for (int j = i +1; j <= max; j++) {
-						this.yield(new Pair(i, j));
-					}
+		return Sequence.create(s -> {
+			for(int i = min; i <= max; ++i) {
+				for (int j = i +1; j <= max; j++) {
+					s.yield(new Pair(i, j));
 				}
 			}
 		});
@@ -90,8 +81,7 @@ public class LoomGeneratorTestsJava {
 	
 	@Test
 	public void javaSequenceCombinationsWithFlatmapTest() {
-	
-		Sequence<Pair<Integer,Integer>> combs =
+		var combs =
 			range(10,20).flatMap(n1 ->
 				range(n1 +1,20).flatMap( n -> List.of(new Pair(n1, n)) )
 			);
@@ -100,24 +90,26 @@ public class LoomGeneratorTestsJava {
 		combs.forEach((t)-> System.out.println(t) );
 	}
 	
-	
-	
 	@Test
 	public void  hanoiTowerGeneratorTest() {
-		Sequence<String> hanoiSeq = Sequence.create(new SequenceRunnable() {
+		var hanoiSeq = Sequence.create(new SequenceBlock<String>() {
+			Sequence.SequenceIterator<String> s;
+			
 			void hanoi(int n, char start, char end, char aux) {
 				if (n > 0) {
-					hanoi(n-1 , start, aux, end);
-					this.yield(start + " to " + end );
+					hanoi(n - 1, start, aux, end);
+					s.yield(start + " to " + end);
 					hanoi(n - 1, aux, end, start);
 				}
 			}
 			
 			@Override
-			public void run() {
+			public void exec(Sequence.SequenceIterator<String> seq) {
+				s = seq;
 				hanoi(10, 'A', 'B', 'C');
 			}
-        });
+		});
+		
 		
 		Sequence<Pair<Integer,String>> moves =
 				iterate(1, n -> n+1)
