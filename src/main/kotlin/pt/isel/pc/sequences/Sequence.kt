@@ -46,8 +46,8 @@ class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterabl
     // generators
 
     companion object {
-         fun <T> iterate(initial: T, func: ( (T) -> T)) : Sequence<T> {
-            return  Sequence<T>()  {
+         fun <T> iterate(initial: T, func: ( (T) -> T))  =
+            Sequence  {
                 var next = initial
                 while(true) {
                     val n = next
@@ -55,7 +55,16 @@ class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterabl
                     yield(n)
                 }
             }
-        }
+
+
+        fun range(min: Int, max: Int): Sequence<Int> =
+            Sequence {
+                var curr = min
+                while (curr <= max) {
+                    yield(curr)
+                    curr += 1
+                }
+            }
     }
 
 
@@ -72,8 +81,9 @@ class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterabl
 
     fun <U,V> zip(other : Sequence<U>, combiner: ((t: T, u: U) -> V) ): Sequence<V>  {
         var src  = this
-        return  Sequence<V>()  {
+        return  Sequence {
             val itOther = other.iterator()
+
             val itSrc = src.iterator()
             while(itSrc.hasNext() && itOther.hasNext()) {
                 yield(combiner(itSrc.next(), itOther.next()));

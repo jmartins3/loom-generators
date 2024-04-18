@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="pt.isel.pc.sequences1.LoomGeneratorTestsJava" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-04-18T11:34:14" hostname="CEIRA" time="0.117">
+<testsuite name="pt.isel.pc.sequences1.LoomGeneratorTestsJava" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-04-18T16:38:49" hostname="CEIRA" time="0.172">
   <properties/>
-  <testcase name="javaSequenceCombinationsWithFlatmapTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.03"/>
-  <testcase name="javaSequenceZipTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.003"/>
-  <testcase name="javaSequenceCombinationsTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.011"/>
-  <testcase name="javaSequenceTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.005"/>
-  <testcase name="hanoiTowerGeneratorTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.061"/>
+  <testcase name="javaSequenceCombinationsWithFlatmapTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.053"/>
+  <testcase name="javaSequenceZipTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.006"/>
+  <testcase name="javaSequenceCombinationsTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.016"/>
+  <testcase name="javaSequenceTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.007"/>
+  <testcase name="hanoiTowerGeneratorTest()" classname="pt.isel.pc.sequences1.LoomGeneratorTestsJava" time="0.083"/>
   <system-out><![CDATA[{ 10: 11 }
 { 10: 12 }
 { 10: 13 }

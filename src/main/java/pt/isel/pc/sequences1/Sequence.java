@@ -14,16 +14,15 @@ import java.util.function.UnaryOperator;
 
 public interface Sequence<T> extends Iterable<T> {
     
-    static <T> Sequence<T> create(SequenceBlock<T> generator) {
+    static <T> Sequence<T> sequence(SequenceBlock<T> generator) {
         ContinuationScope scope = new ContinuationScope("SequenceScope");
-        return () -> new SequenceIterator<T>(generator, scope);
+        return () -> new SequenceIterator<>(generator, scope);
     }
     
     class SequenceIterator<T> implements  Iterator<T> {
         private T nextValue  = null;
         private Continuation cont;
         private ContinuationScope scope;
-        
         
         public SequenceIterator(SequenceBlock<T> generator, ContinuationScope scope) {
             var t = this;
@@ -55,7 +54,7 @@ public interface Sequence<T> extends Iterable<T> {
     // generators
     
     static <T> Sequence<T> iterate(T initial, UnaryOperator<T> func) {
-        return  Sequence.create(s -> {
+        return  sequence(s -> {
             T next = initial;
             while (true) {
                 var n = next;
@@ -66,7 +65,7 @@ public interface Sequence<T> extends Iterable<T> {
     }
     
     static Sequence<Integer>  range(int min, int max) {
-        return Sequence.create(seq -> {
+        return sequence(seq -> {
             int curr = min;
             while (curr <= max) {
                 seq.yield(curr);
@@ -76,9 +75,9 @@ public interface Sequence<T> extends Iterable<T> {
         });
     }
     
-   
+    // intermediate operations
     default Sequence<T> limit(int lim) {
-        return  Sequence.create(s -> {
+        return  sequence(s -> {
             Iterator<T> srcIt = iterator();
             int curr = 0;
             
@@ -90,7 +89,7 @@ public interface Sequence<T> extends Iterable<T> {
     }
     
     default <U,V>  Sequence<V> zip(Sequence<U> other , BiFunction<T,U,V> combiner )  {
-        return  Sequence.create(s -> {
+        return  sequence(s -> {
             var itOther = other.iterator();
             var itSrc = iterator();
             while(itSrc.hasNext() && itOther.hasNext()) {
@@ -100,7 +99,7 @@ public interface Sequence<T> extends Iterable<T> {
     }
     
     default <U>  Sequence<U> flatMap(Function<T,Iterable<U>> mapper )  {
-        return  Sequence.create(s -> {
+        return  sequence(s -> {
             for(var t : this) {
                 for (var u : mapper.apply(t)) {
                     s.yield(u);

@@ -1,7 +1,6 @@
 package pt.isel.pc.sequences1;
 
 import org.junit.jupiter.api.Test;
-import pt.isel.pc.sequences1.Sequence;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class LoomGeneratorTestsJava {
 			}
 		};
 		
-		Sequence<Integer> evens = create(block);
+		Sequence<Integer> evens = sequence(block);
 		
 		var evensLimited = evens.limit(20);
 		
@@ -46,7 +45,7 @@ public class LoomGeneratorTestsJava {
 	
 	@Test
 	public void javaSequenceZipTest() {
-		Sequence<String> strings = create(s-> {
+		Sequence<String> strings = sequence(s-> {
 				s.yield("Joao");
 				s.yield("Jorge");
 				s.yield("Pedro");
@@ -62,7 +61,7 @@ public class LoomGeneratorTestsJava {
 	}
 	
 	private Sequence<Pair<Integer,Integer>> combs(int min, int max) {
-		return Sequence.create(s -> {
+		return sequence(s -> {
 			for(int i = min; i <= max; ++i) {
 				for (int j = i +1; j <= max; j++) {
 					s.yield(new Pair(i, j));
@@ -92,7 +91,7 @@ public class LoomGeneratorTestsJava {
 	
 	@Test
 	public void  hanoiTowerGeneratorTest() {
-		var hanoiSeq = Sequence.create(new SequenceBlock<String>() {
+		var hanoiSeq = sequence(new SequenceBlock<String>() {
 			SequenceIterator<String> s;
 			
 			void hanoi(int n, char start, char end, char aux) {
