@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static pt.isel.pc.sequences1.Sequence.*;
 
 public class LoomGeneratorTestsJava {
@@ -105,17 +106,25 @@ public class LoomGeneratorTestsJava {
 			@Override
 			public void exec(SequenceIterator<String> seq) {
 				s = seq;
-				hanoi(10, 'A', 'B', 'C');
+				hanoi(24, 'A', 'B', 'C');
 			}
 		});
 		
-		
+		/*
 		Sequence<Pair<Integer,String>> moves =
 				iterate(1, n -> n+1)
 				.zip(hanoiSeq, (n, s) -> new Pair(n,s));
+				
+		 */
 		
-		for (var move : moves) {
-			System.out.println(move);
+		long startTime = System.currentTimeMillis();
+		var count = 0;
+		for (var move : hanoiSeq) {
+			count++;
 		}
+		
+		assertEquals(16*1024*1024-1, count);
+		System.out.println("hanoiTowerGeneratorTest done in "+
+							   (System.currentTimeMillis()-startTime) + "millis");
 	}
 }

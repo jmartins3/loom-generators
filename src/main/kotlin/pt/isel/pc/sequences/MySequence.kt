@@ -7,7 +7,7 @@ package pt.isel.pc.sequences
 import jdk.internal.vm.Continuation
 import jdk.internal.vm.ContinuationScope
 
-class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterable<T> {
+class MySequence<T>(val block : MySequence<T>.SequenceIterator.() -> Unit) : Iterable<T> {
 
     private val scope = ContinuationScope("SequenceScope")
 
@@ -47,7 +47,7 @@ class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterabl
 
     companion object {
          fun <T> iterate(initial: T, func: ( (T) -> T))  =
-            Sequence  {
+            MySequence  {
                 var next = initial
                 while(true) {
                     val n = next
@@ -57,8 +57,8 @@ class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterabl
             }
 
 
-        fun range(min: Int, max: Int): Sequence<Int> =
-            Sequence {
+        fun range(min: Int, max: Int): MySequence<Int> =
+            MySequence {
                 var curr = min
                 while (curr <= max) {
                     yield(curr)
@@ -68,9 +68,9 @@ class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterabl
     }
 
 
-    fun  limit(limit: Int) : Sequence<T>  {
+    fun  limit(limit: Int) : MySequence<T>  {
         val src = this
-        return  Sequence<T>()  {
+        return  MySequence<T>()  {
             var curr = 0;
             val itSrc = src.iterator()
             while (curr++ < limit && itSrc.hasNext()) {
@@ -79,9 +79,9 @@ class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterabl
         }
     }
 
-    fun <U,V> zip(other : Sequence<U>, combiner: ((t: T, u: U) -> V) ): Sequence<V>  {
+    fun <U,V> zip(other : MySequence<U>, combiner: ((t: T, u: U) -> V) ): MySequence<V>  {
         var src  = this
-        return  Sequence {
+        return  MySequence {
             val itOther = other.iterator()
 
             val itSrc = src.iterator()
