@@ -5,17 +5,16 @@
 package pt.isel.pc
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import pt.isel.pc.sequences.MySequence.*
+import pt.isel.pc.sequences.Sequence.*
 import org.junit.jupiter.api.Test
-import pt.isel.pc.sequences.MySequence
+import pt.isel.pc.sequences.Sequence
 import kotlin.system.measureTimeMillis
-import kotlin.time.measureTime
 
 
 class LoomGeneratorTestsKotlin {
     @Test
     fun `my sequence test`() {
-        val evens = MySequence {
+        val evens = Sequence {
             var curr = 2
 
             while (true) {
@@ -35,7 +34,7 @@ class LoomGeneratorTestsKotlin {
 
     @Test
     fun `hanoi tower generator test`() {
-        var hanoiSeq = MySequence<String> {
+        var hanoiSeq = Sequence {
             fun hanoi(n: Int, start: Char, end: Char, aux: Char) {
                 if (n > 0) {
                     hanoi(n-1 , start, aux, end)
@@ -96,7 +95,7 @@ class LoomGeneratorTestsKotlin {
     @Test
     fun `hanoi tower generator with kotlin sequences test2`() {
 
-        fun hanoi(n: Int, start: Char, end: Char, aux: Char): Sequence<String> = sequence {
+        fun hanoi(n: Int, start: Char, end: Char, aux: Char): kotlin.sequences.Sequence<String> = sequence {
             if (n > 0) {
                 yieldAll(hanoi(n - 1, start, aux, end))
                 yield(start + " to " + end)

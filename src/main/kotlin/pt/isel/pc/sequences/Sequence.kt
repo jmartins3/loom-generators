@@ -7,7 +7,7 @@ package pt.isel.pc.sequences
 import jdk.internal.vm.Continuation
 import jdk.internal.vm.ContinuationScope
 
-class MySequence<T>(val block : MySequence<T>.SequenceIterator.() -> Unit) : Iterable<T> {
+class Sequence<T>(val block : Sequence<T>.SequenceIterator.() -> Unit) : Iterable<T> {
 
     private val scope = ContinuationScope("SequenceScope")
 
@@ -47,18 +47,18 @@ class MySequence<T>(val block : MySequence<T>.SequenceIterator.() -> Unit) : Ite
 
     companion object {
          fun <T> iterate(initial: T, func: ( (T) -> T))  =
-            MySequence  {
-                var next = initial
-                while(true) {
-                    val n = next
-                    next = func(next)
-                    yield(n)
-                }
-            }
+             Sequence {
+                 var next = initial
+                 while(true) {
+                     val n = next
+                     next = func(next)
+                     yield(n)
+                 }
+             }
 
 
-        fun range(min: Int, max: Int): MySequence<Int> =
-            MySequence {
+        fun range(min: Int, max: Int): Sequence<Int> =
+            Sequence {
                 var curr = min
                 while (curr <= max) {
                     yield(curr)
@@ -68,9 +68,9 @@ class MySequence<T>(val block : MySequence<T>.SequenceIterator.() -> Unit) : Ite
     }
 
 
-    fun  limit(limit: Int) : MySequence<T>  {
+    fun  limit(limit: Int) : Sequence<T> {
         val src = this
-        return  MySequence<T>()  {
+        return Sequence<T>()  {
             var curr = 0;
             val itSrc = src.iterator()
             while (curr++ < limit && itSrc.hasNext()) {
@@ -79,9 +79,9 @@ class MySequence<T>(val block : MySequence<T>.SequenceIterator.() -> Unit) : Ite
         }
     }
 
-    fun <U,V> zip(other : MySequence<U>, combiner: ((t: T, u: U) -> V) ): MySequence<V>  {
+    fun <U,V> zip(other : Sequence<U>, combiner: ((t: T, u: U) -> V) ): Sequence<V> {
         var src  = this
-        return  MySequence {
+        return Sequence {
             val itOther = other.iterator()
 
             val itSrc = src.iterator()
